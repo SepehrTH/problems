@@ -1,0 +1,88 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+typedef long long ll;
+typedef vector <int> vi;
+typedef vector <string> vs;
+typedef pair <int, int> pii;
+typedef vector<pii > vpii;
+
+#define MP make_pair
+#define F first
+#define S second
+#define REVERSE(a) reverse (a.begin(), a.end())
+#define ALL(a) a.begin(), a.end()
+#define ms(x,y) memset (x, y, sizeof (x))
+#define pb push_back
+#define debug(a,b) cout<<a<<": "<<b<<endl
+#define Debug cout<<"Reached here"<<endl
+#define prnt(a) cout<<a<<"\n"
+#define VecPrnt(v) for(auto i: v) cout<<i<<" "; cout<<endl
+#define endl "\n"
+#define PrintPair(x) cout<<x.first<<" "<<x.second<<endl
+#define ArrPrint(a,st,en) for(int J=st; J<=en; J++) cout<<a[J]<<" "; cout<<endl;
+
+/* Direction Array */
+
+// int fx[]={1,-1,0,0};
+// int fy[]={0,0,1,-1};
+// int fx[]={0,0,1,-1,-1,1,-1,1};
+// int fy[]={-1,1,0,0,1,1,-1,-1};
+
+const int maxn = 2e5+5;
+int n, a[maxn], s[maxn], mark[maxn];
+vi adj[maxn];
+vi seq;
+queue<int> q;
+
+bool cmp(int x, int y) { return s[x] < s[y]; }
+
+void bfs()
+{
+    q.push(1);
+    mark[1] = 1;
+    seq.pb(1);
+    while(q.size()>0) {
+        int v = q.front();
+        q.pop();
+        for(int u : adj[v]) {
+            if(!mark[u]) {
+                seq.pb(u);
+                mark[u] = 1;
+                q.push(u);
+            }
+        }
+    }
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(0);
+    cin.tie(NULL); cout.tie(NULL);
+
+    cin >> n;
+    for(int u, v, i = 1 ; i < n; i++) {
+        cin >> u >> v;
+        adj[u].pb(v), adj[v].pb(u);
+    }
+
+    for(int i = 0; i < n; i++) {
+        cin >> a[i];
+        s[a[i]] = i;
+    }
+
+    for(int i = 1; i <= n; i++) {
+        sort(ALL(adj[i]), cmp);
+    }
+
+    bfs();
+
+    for(int i = 0; i < n; i++)
+        if(seq[i] != a[i]) {
+            prnt("NO");
+            return 0;
+        }
+    prnt("YES");
+    return 0;
+}
